@@ -6,7 +6,7 @@ public readonly struct MyVector
     : IMultiplyOperators<MyVector, MyVector, Double>
 {
     private readonly Double[] data;
-    public MyVector(Double[] data) => this.data = data;
+    public MyVector(params Double[] data) => this.data = data;
     public MyVector(Func<Int32, Double> init, Int32 size)
     {
         var data = new Double[size];
@@ -18,4 +18,5 @@ public readonly struct MyVector
     }
 
     public static Double operator *(MyVector left, MyVector right) => DotProduct.Execute(left.data, right.data);
+    public static implicit operator ReadOnlySpan<Double>(in MyVector vector) => vector.data;
 }
