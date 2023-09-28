@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.Intrinsics;
 
 namespace Vectorization;
 
@@ -73,6 +74,43 @@ public static class DotProduct
             vectorSum += l * r;
         }
         Double sum = Vector.Sum(vectorSum);
+        for (Int32 i = top; i < left.Length; ++i)
+        {
+            sum += left[i] * right[i];
+        }
+        return sum;
+    }
+
+    public static Double Vectorized128(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    {
+        const Int32 width = 2; // 2 * 64 = 128;
+        Vector128<Double> vectorSum = Vector128<Double>.Zero;
+        Int32 top = left.Length - (left.Length % width);
+        for (Int32 i = 0; i < top; i += width)
+        {
+            var l = Vector128.Create(left[i], left[i + 1]);
+            var r = Vector128.Create(right[i], right[i + 1]);
+            vectorSum += l * r;
+        }
+        Double sum = Vector128.Sum(vectorSum);
+        for (Int32 i = top; i < left.Length; ++i)
+        {
+            sum += left[i] * right[i];
+        }
+        return sum;
+    }
+    public static Double Vectorized256(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    {
+        const Int32 width = 4; // 4 * 64 = 256;
+        Vector256<Double> vectorSum = Vector256<Double>.Zero;
+        Int32 top = left.Length - (left.Length % width);
+        for (Int32 i = 0; i < top; i += width)
+        {
+            var l = Vector256.Create(left[i], left[i + 1], left[i + 2], left[i + 3]);
+            var r = Vector256.Create(right[i], right[i + 1], right[i + 2], right[i + 3]);
+            vectorSum += l * r;
+        }
+        Double sum = Vector256.Sum(vectorSum);
         for (Int32 i = top; i < left.Length; ++i)
         {
             sum += left[i] * right[i];

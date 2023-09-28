@@ -6,6 +6,7 @@ public class DotProductTests
     private const Int32 size = 50;
     private static readonly MyVector vectorA = new(i => i % 7, size);
     private static readonly MyVector vectorB = new(i => i % 11, size);
+
     [Fact]
     public void ScalarProductIsZeroForOrthogonalVectors()
     {
@@ -40,12 +41,33 @@ public class DotProductTests
 
         Assert.Equal(expected, actual);
     }
+
     [Fact]
     public void VectorizedComputesSameAsScalarVersion()
     {
         var expected = DotProduct.Scalar(vectorA, vectorB);
 
         var actual = DotProduct.Vectorized(vectorA, vectorB);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Vectorized128ComputesSameAsScalarVersion()
+    {
+        var expected = DotProduct.Scalar(vectorA, vectorB);
+
+        var actual = DotProduct.Vectorized128(vectorA, vectorB);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Vectorized256ComputesSameAsScalarVersion()
+    {
+        var expected = DotProduct.Scalar(vectorA, vectorB);
+
+        var actual = DotProduct.Vectorized256(vectorA, vectorB);
 
         Assert.Equal(expected, actual);
     }
