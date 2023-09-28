@@ -40,4 +40,13 @@ public class DotProductTests
 
         Assert.Equal(expected, actual);
     }
+    [Fact]
+    public void VectorizedComputesSameAsScalarVersion()
+    {
+        var expected = DotProduct.Scalar(vectorA, vectorB);
+
+        var actual = DotProduct.Vectorized(vectorA, vectorB);
+
+        Assert.Equal(expected, actual);
+    }
 }

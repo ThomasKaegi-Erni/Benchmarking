@@ -22,6 +22,9 @@ namespace Vectorization.Benchmark
 
         [Benchmark]
         public Double UnrolledScalar() => DotProduct.UnrolledScalar(this.left, this.right);
+
+        [Benchmark]
+        public Double Vectorized() => DotProduct.Vectorized(this.left, this.right);
     }
 }
 
@@ -37,15 +40,19 @@ BenchmarkDotNet v0.13.8, Windows 10 (10.0.19045.3448/22H2/2022Update)
 
 | Method         | Size | Mean       | Error     | StdDev    | Ratio | RatioSD |
 |--------------- |----- |-----------:|----------:|----------:|------:|--------:|
-| Scalar         | 3    |   2.546 ns | 0.0283 ns | 0.0237 ns |  1.00 |    0.00 |
-| UnrolledScalar | 3    |   4.266 ns | 0.0503 ns | 0.0393 ns |  1.67 |    0.02 |
+| Scalar         | 3    |   2.560 ns | 0.0383 ns | 0.0359 ns |  1.00 |    0.00 |
+| UnrolledScalar | 3    |   4.231 ns | 0.0307 ns | 0.0256 ns |  1.65 |    0.02 |
+| Vectorized     | 3    |   3.707 ns | 0.0455 ns | 0.0426 ns |  1.45 |    0.02 |
 |                |      |            |           |           |       |         |
-| Scalar         | 12   |   6.186 ns | 0.0431 ns | 0.0382 ns |  1.00 |    0.00 |
-| UnrolledScalar | 12   |   5.992 ns | 0.0425 ns | 0.0397 ns |  0.97 |    0.01 |
+| Scalar         | 12   |   6.154 ns | 0.0626 ns | 0.0585 ns |  1.00 |    0.00 |
+| UnrolledScalar | 12   |   5.967 ns | 0.0258 ns | 0.0241 ns |  0.97 |    0.01 |
+| Vectorized     | 12   |   6.249 ns | 0.0236 ns | 0.0210 ns |  1.02 |    0.01 |
 |                |      |            |           |           |       |         |
-| Scalar         | 128  |  69.391 ns | 0.6418 ns | 0.6003 ns |  1.00 |    0.00 |
-| UnrolledScalar | 128  |  59.404 ns | 0.2396 ns | 0.2242 ns |  0.86 |    0.01 |
+| Scalar         | 128  |  69.638 ns | 0.6972 ns | 0.6180 ns |  1.00 |    0.00 |
+| UnrolledScalar | 128  |  59.837 ns | 0.3311 ns | 0.2585 ns |  0.86 |    0.01 |
+| Vectorized     | 128  |  45.456 ns | 0.3964 ns | 0.3514 ns |  0.65 |    0.01 |
 |                |      |            |           |           |       |         |
-| Scalar         | 1521 | 718.090 ns | 5.9852 ns | 5.3057 ns |  1.00 |    0.00 |
-| UnrolledScalar | 1521 | 701.315 ns | 4.2346 ns | 3.9610 ns |  0.98 |    0.01 |
+| Scalar         | 1521 | 721.803 ns | 2.2077 ns | 1.7236 ns |  1.00 |    0.00 |
+| UnrolledScalar | 1521 | 702.205 ns | 5.0069 ns | 4.6835 ns |  0.97 |    0.01 |
+| Vectorized     | 1521 | 532.212 ns | 2.7249 ns | 2.4156 ns |  0.74 |    0.00 |
 */
