@@ -11,7 +11,23 @@ public static class DotProduct
 
     public static Single Execute(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        return 0;
+        if (!Vector<Single>.IsSupported || left.Length < Vector<Single>.Count)
+        {
+            return Scalar(in left, in right);
+        }
+        if (Vector<Single>.IsSupported)
+        {
+            return Vectorized(in left, in right);
+        }
+        if (Vector256<Single>.IsSupported && left.Length >= Vector256<Single>.Count)
+        {
+            return Vectorized256(in left, in right);
+        }
+        if (Vector128<Single>.IsSupported && left.Length >= Vector128<Single>.Count)
+        {
+            return Vectorized128(in left, in right);
+        }
+        return UnrolledScalar(in left, in right);
     }
     public static Single Scalar(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {

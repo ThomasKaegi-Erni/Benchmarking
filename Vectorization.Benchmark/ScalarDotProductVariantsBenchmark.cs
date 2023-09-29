@@ -1,37 +1,36 @@
 ﻿using BenchmarkDotNet.Attributes;
 
-namespace Vectorization.Benchmark
+namespace Vectorization.Benchmark;
+
+// Do not seal benchmark classes. Benchmark.Net subclasses them...
+public class ScalarDotProductVariantsBenchmark
 {
-    // Do not seal benchmark classes. Benchmark.Net subclasses them...
-    public class ScalarDotProductVariantsBenchmark
+    private MyVector left, right;
+
+    [Params(3, 12, 128)]
+    public Int32 Size { get; set; }
+
+    [GlobalSetup]
+    public void Setup()
     {
-        private MyVector left, right;
-
-        [Params(3, 12, 128)]
-        public Int32 Size { get; set; }
-
-        [GlobalSetup]
-        public void Setup()
-        {
-            this.left = new MyVector(i => i, Size);
-            this.right = new MyVector(i => 1f / i, Size);
-        }
-
-        [Benchmark(Baseline = true)]
-        public Double Naive() => DotProduct.Scalar(this.left, this.right);
-
-        [Benchmark]
-        public Double Generic() => DotProduct.GenericScalar<Single>(this.left, this.right);
-
-        [Benchmark]
-        public Double Recursive() => DotProduct.RecursiveScalar(this.left, this.right);
-
-        [Benchmark]
-        public Double Unrolled() => DotProduct.UnrolledScalar(this.left, this.right);
-
-        [Benchmark]
-        public Double FusedMultiplyAdd() => DotProduct.FusedScalar(this.left, this.right);
+        this.left = new MyVector(i => i, Size);
+        this.right = new MyVector(i => 1f / i, Size);
     }
+
+    [Benchmark(Baseline = true)]
+    public Double Naive() => DotProduct.Scalar(this.left, this.right);
+
+    [Benchmark]
+    public Double Generic() => DotProduct.GenericScalar<Single>(this.left, this.right);
+
+    [Benchmark]
+    public Double Recursive() => DotProduct.RecursiveScalar(this.left, this.right);
+
+    [Benchmark]
+    public Double Unrolled() => DotProduct.UnrolledScalar(this.left, this.right);
+
+    [Benchmark]
+    public Double FusedMultiplyAdd() => DotProduct.FusedScalar(this.left, this.right);
 }
 
 /*
@@ -40,8 +39,8 @@ namespace Vectorization.Benchmark
 BenchmarkDotNet v0.13.8, Windows 10 (10.0.19045.3448/22H2/2022Update)
 12th Gen Intel Core i7-1260P, 1 CPU, 16 logical and 12 physical cores
 .NET SDK 7.0.401
-  [Host]     : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
-  DefaultJob : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
+[Host]     : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
+DefaultJob : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
 
 
 | Method           | Size | Mean       | Error      | StdDev     | Ratio | RatioSD |

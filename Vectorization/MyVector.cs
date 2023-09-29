@@ -10,7 +10,7 @@ public readonly struct MyVector
     public MyVector(Func<Int32, Single> init, Int32 size)
     {
         var data = new Single[size];
-        for (Int32 i = 0; i < data.Length; i++)
+        for (Int32 i = 0; i < data.Length; ++i)
         {
             data[i] = init(i);
         }
