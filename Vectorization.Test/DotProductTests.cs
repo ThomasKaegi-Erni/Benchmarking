@@ -2,7 +2,7 @@ namespace Vectorization.Test;
 
 public class DotProductTests
 {
-    const Int32 tolerance = 4;
+    const Int32 precision = 4;
     private const Int32 size = 50;
     private static readonly MyVector vectorA = new(i => i % 7, size);
     private static readonly MyVector vectorB = new(i => i % 11, size);
@@ -29,45 +29,84 @@ public class DotProductTests
 
         var actual = DotProduct.Scalar(scaled, ones);
 
-        Assert.Equal(expected, actual, tolerance);
+        Assert.Equal(expected, actual, precision);
+    }
+
+    [Fact]
+    public void RecursiveIsMorePreciseThanOtherDotProducts()
+    {
+        const Int32 size = 118;
+        const Single scaling = 1.367f;
+        var ones = new MyVector(_ => 1, size);
+        var scaled = new MyVector(_ => scaling, size);
+        var expected = scaling * size;
+
+        var actual = DotProduct.RecursiveScalar(scaled, ones);
+
+        Assert.Equal(expected, actual); // i.e. no tolerance required :-)
+    }
+
+    [Fact]
+    public void VectorizedRecursiveIsMorePreciseThanOtherDotProducts()
+    {
+        const Int32 size = 118;
+        const Single scaling = 1.367f;
+        var ones = new MyVector(_ => 1, size);
+        var scaled = new MyVector(_ => scaling, size);
+        var expected = scaling * size;
+
+        var actual = DotProduct.RecursiveVectorized128(scaled, ones);
+
+        Assert.Equal(expected, actual); // i.e. no tolerance required :-)
     }
 
     [Fact]
     public void UnrolledScalarComputesSameAsScalarVersion()
     {
-        var expected = DotProduct.Scalar(vectorA, vectorB);
+        ComparisonToScalar((l, r) => DotProduct.UnrolledScalar(l, r));
+    }
 
-        var actual = DotProduct.UnrolledScalar(vectorA, vectorB);
+    [Fact]
+    public void GenericScalarComputesSameAsScalarVersion()
+    {
+        ComparisonToScalar((l, r) => DotProduct.GenericScalar<Single>(l, r));
+    }
 
-        Assert.Equal(expected, actual);
+    [Fact]
+    public void ScalarFusedMultiplyComputesSameAsScalarVersion()
+    {
+        ComparisonToScalar((l, r) => DotProduct.FusedScalar(l, r));
     }
 
     [Fact]
     public void VectorizedComputesSameAsScalarVersion()
     {
-        var expected = DotProduct.Scalar(vectorA, vectorB);
-
-        var actual = DotProduct.Vectorized(vectorA, vectorB);
-
-        Assert.Equal(expected, actual);
+        ComparisonToScalar((l, r) => DotProduct.Vectorized(l, r));
     }
 
     [Fact]
     public void Vectorized128ComputesSameAsScalarVersion()
     {
-        var expected = DotProduct.Scalar(vectorA, vectorB);
-
-        var actual = DotProduct.Vectorized128(vectorA, vectorB);
-
-        Assert.Equal(expected, actual);
+        ComparisonToScalar((l, r) => DotProduct.Vectorized128(l, r));
     }
 
     [Fact]
     public void Vectorized256ComputesSameAsScalarVersion()
     {
+        ComparisonToScalar((l, r) => DotProduct.Vectorized256(l, r));
+    }
+
+    [Fact]
+    public void RecursiveVectorized128ComputesSameAsScalarVersion()
+    {
+        ComparisonToScalar((l, r) => DotProduct.RecursiveVectorized128(l, r));
+    }
+
+    public static void ComparisonToScalar(Func<MyVector, MyVector, Single> dotProduct)
+    {
         var expected = DotProduct.Scalar(vectorA, vectorB);
 
-        var actual = DotProduct.Vectorized256(vectorA, vectorB);
+        var actual = dotProduct(vectorA, vectorB);
 
         Assert.Equal(expected, actual);
     }

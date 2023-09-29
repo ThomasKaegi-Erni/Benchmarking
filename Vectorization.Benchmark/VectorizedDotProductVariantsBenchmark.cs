@@ -3,7 +3,7 @@
 namespace Vectorization.Benchmark
 {
     // Do not seal benchmark classes. Benchmark.Net subclasses them...
-    public class DotProductBenchmark
+    public class VectorizedDotProductVariantsBenchmark
     {
         private MyVector left, right;
 
@@ -21,10 +21,16 @@ namespace Vectorization.Benchmark
         public Double Scalar() => DotProduct.Scalar(this.left, this.right);
 
         [Benchmark]
-        public Double UnrolledScalar() => DotProduct.UnrolledScalar(this.left, this.right);
+        public Double Vectorized() => DotProduct.Vectorized(this.left, this.right);
 
         [Benchmark]
-        public Double Vectorized() => DotProduct.Vectorized(this.left, this.right);
+        public Double Vectorized128() => DotProduct.Vectorized(this.left, this.right);
+
+        [Benchmark]
+        public Double Vectorized256() => DotProduct.Vectorized(this.left, this.right);
+
+        [Benchmark]
+        public Double VectorizedRecursive() => DotProduct.RecursiveVectorized128(this.left, this.right);
     }
 }
 

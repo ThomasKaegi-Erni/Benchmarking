@@ -31,6 +31,13 @@ public static class DotProduct
         }
         return sum;
     }
+    public static Single RecursiveScalar(in ReadOnlySpan<Single> l, in ReadOnlySpan<Single> r) => l.Length switch
+    {
+        0 => 0f,
+        1 => l[0] * r[0],
+        2 => l[0] * r[0] + l[1] * r[1],
+        var n => RecursiveScalar(l[..(n / 2)], r[..(n / 2)]) + RecursiveScalar(l[(n / 2)..], r[(n / 2)..])
+    };
     public static T GenericScalar<T>(in ReadOnlySpan<T> left, in ReadOnlySpan<T> right)
         where T : IMultiplyOperators<T, T, T>, IAdditionOperators<T, T, T>
     {
@@ -98,6 +105,21 @@ public static class DotProduct
             sum += left[i] * right[i];
         }
         return sum;
+    }
+    public static Single RecursiveVectorized128(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
+    {
+        // 4 * 32 = 128;
+        return Vector128.Sum(Recursive(in left, in right));
+
+        static Vector128<Single> Recursive(in ReadOnlySpan<Single> l, in ReadOnlySpan<Single> r) => l.Length switch
+        {
+            0 => Vector128<Single>.Zero,
+            1 => Vector128.Create(l[0] * r[0], 0f, 0f, 0f),
+            2 => Vector128.Create(l[0] * r[0], l[1] * r[1], 0f, 0f),
+            3 => Vector128.Create(l[0], l[1], l[2], 0f) * Vector128.Create(r[0], r[1], r[2], 0f),
+            4 => Vector128.Create(l[0], l[1], l[2], l[3]) * Vector128.Create(r[0], r[1], r[2], r[3]),
+            var n => Recursive(l[..(n / 2)], r[..(n / 2)]) + Recursive(l[(n / 2)..], r[(n / 2)..])
+        };
     }
     public static Single Vectorized256(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
