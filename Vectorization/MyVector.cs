@@ -3,13 +3,13 @@
 namespace Vectorization;
 
 public readonly struct MyVector
-    : IMultiplyOperators<MyVector, MyVector, Double>
+    : IMultiplyOperators<MyVector, MyVector, Single>
 {
-    private readonly Double[] data;
-    public MyVector(params Double[] data) => this.data = data;
-    public MyVector(Func<Int32, Double> init, Int32 size)
+    private readonly Single[] data;
+    public MyVector(params Single[] data) => this.data = data;
+    public MyVector(Func<Int32, Single> init, Int32 size)
     {
-        var data = new Double[size];
+        var data = new Single[size];
         for (Int32 i = 0; i < data.Length; i++)
         {
             data[i] = init(i);
@@ -17,6 +17,6 @@ public readonly struct MyVector
         this.data = data;
     }
 
-    public static Double operator *(MyVector left, MyVector right) => DotProduct.Execute(left.data, right.data);
-    public static implicit operator ReadOnlySpan<Double>(in MyVector vector) => vector.data;
+    public static Single operator *(MyVector left, MyVector right) => DotProduct.Execute(left.data, right.data);
+    public static implicit operator ReadOnlySpan<Single>(in MyVector vector) => vector.data;
 }

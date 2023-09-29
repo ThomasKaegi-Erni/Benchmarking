@@ -9,25 +9,25 @@ public static class DotProduct
         - shortcut to small vectors when input size is small
     */
 
-    public static Double Execute(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single Execute(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
         return 0;
     }
-    public static Double Scalar(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single Scalar(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        Double sum = left[0] * right[0];
+        Single sum = left[0] * right[0];
         for (Int32 i = 1; i < left.Length; ++i)
         {
             sum += left[i] * right[i];
         }
         return sum;
     }
-    public static Double FusedScalar(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single FusedScalar(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        Double sum = left[0] * right[0];
+        Single sum = left[0] * right[0];
         for (Int32 i = 1; i < left.Length; ++i)
         {
-            sum = Double.FusedMultiplyAdd(left[i], right[i], sum);
+            sum = Single.FusedMultiplyAdd(left[i], right[i], sum);
         }
         return sum;
     }
@@ -42,10 +42,10 @@ public static class DotProduct
         return sum;
     }
 
-    public static Double UnrolledScalar(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single UnrolledScalar(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
         const Int32 stride = 4;
-        Double sum = 0;
+        Single sum = 0;
         Int32 top = left.Length - (left.Length % stride);
         for (Int32 i = 0; i < top; i += stride)
         {
@@ -62,18 +62,18 @@ public static class DotProduct
     }
 
     // Note that this is numerically a more stable algorithm than the scalar version (but only by a constant factor)
-    public static Double Vectorized(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single Vectorized(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        Vector<Double> vectorSum = Vector<Double>.Zero;
-        Int32 top = left.Length - (left.Length % Vector<Double>.Count);
-        for (Int32 i = 0; i < top; i += Vector<Double>.Count)
+        Vector<Single> vectorSum = Vector<Single>.Zero;
+        Int32 top = left.Length - (left.Length % Vector<Single>.Count);
+        for (Int32 i = 0; i < top; i += Vector<Single>.Count)
         {
-            var range = new Range(i, i + Vector<Double>.Count);
-            var l = new Vector<Double>(left[range]);
-            var r = new Vector<Double>(right[range]);
+            var range = new Range(i, i + Vector<Single>.Count);
+            var l = new Vector<Single>(left[range]);
+            var r = new Vector<Single>(right[range]);
             vectorSum += l * r;
         }
-        Double sum = Vector.Sum(vectorSum);
+        Single sum = Vector.Sum(vectorSum);
         for (Int32 i = top; i < left.Length; ++i)
         {
             sum += left[i] * right[i];
@@ -81,36 +81,36 @@ public static class DotProduct
         return sum;
     }
 
-    public static Double Vectorized128(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single Vectorized128(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        const Int32 width = 2; // 2 * 64 = 128;
-        Vector128<Double> vectorSum = Vector128<Double>.Zero;
+        const Int32 width = 4; // 4 * 32 = 128;
+        Vector128<Single> vectorSum = Vector128<Single>.Zero;
         Int32 top = left.Length - (left.Length % width);
         for (Int32 i = 0; i < top; i += width)
         {
-            var l = Vector128.Create(left[i], left[i + 1]);
-            var r = Vector128.Create(right[i], right[i + 1]);
+            var l = Vector128.Create(left[i], left[i + 1], left[i + 2], left[i + 3]);
+            var r = Vector128.Create(right[i], right[i + 1], right[i + 2], right[i + 3]);
             vectorSum += l * r;
         }
-        Double sum = Vector128.Sum(vectorSum);
+        Single sum = Vector128.Sum(vectorSum);
         for (Int32 i = top; i < left.Length; ++i)
         {
             sum += left[i] * right[i];
         }
         return sum;
     }
-    public static Double Vectorized256(in ReadOnlySpan<Double> left, in ReadOnlySpan<Double> right)
+    public static Single Vectorized256(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        const Int32 width = 4; // 4 * 64 = 256;
-        Vector256<Double> vectorSum = Vector256<Double>.Zero;
+        const Int32 width = 8; // 8 * 32 = 256;
+        Vector256<Single> vectorSum = Vector256<Single>.Zero;
         Int32 top = left.Length - (left.Length % width);
         for (Int32 i = 0; i < top; i += width)
         {
-            var l = Vector256.Create(left[i], left[i + 1], left[i + 2], left[i + 3]);
-            var r = Vector256.Create(right[i], right[i + 1], right[i + 2], right[i + 3]);
+            var l = Vector256.Create(left[i], left[i + 1], left[i + 2], left[i + 3], left[i + 4], left[i + 5], left[i + 6], left[i + 7]);
+            var r = Vector256.Create(right[i], right[i + 1], right[i + 2], right[i + 3], right[i + 4], right[i + 5], right[i + 6], right[i + 7]);
             vectorSum += l * r;
         }
-        Double sum = Vector256.Sum(vectorSum);
+        Single sum = Vector256.Sum(vectorSum);
         for (Int32 i = top; i < left.Length; ++i)
         {
             sum += left[i] * right[i];
