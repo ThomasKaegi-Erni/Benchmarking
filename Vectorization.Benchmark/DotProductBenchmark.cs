@@ -16,6 +16,7 @@ public class DotProductBenchmark
         this.right = new MyVector(i => 1f / i, Size);
     }
 
+    // Returning Double as my antivirus doesn't like Single's.
     [Benchmark]
     public Double DotProduct() => this.left * this.right;
 }

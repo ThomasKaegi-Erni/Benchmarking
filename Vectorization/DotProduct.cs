@@ -6,7 +6,9 @@ namespace Vectorization;
 public static class DotProduct
 {
     /* Optimizations to explore
-        - shortcut to small vectors when input size is small
+        - remove premature initialisation of sum with first multiplication (var sum = left[0]*right[0])
+        - improve numerical accuracy of unrolled scalar.
+        - improve readability by always using the scalar variant for the "tail". (is performance impacted?)
     */
 
     public static Single Execute(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
@@ -76,6 +78,8 @@ public static class DotProduct
             sum += left[i + 1] * right[i + 1];
             sum += left[i + 2] * right[i + 2];
             sum += left[i + 3] * right[i + 3];
+            // numerically more stable, possibly also faster:
+            // sum += (a + b + c + d)
         }
         for (Int32 i = top; i < left.Length; ++i)
         {

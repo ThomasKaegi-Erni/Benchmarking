@@ -6,6 +6,7 @@ public readonly struct MyVector
     : IMultiplyOperators<MyVector, MyVector, Single>
 {
     private readonly Single[] data;
+    public Int32 Size => this.data.Length;
     public MyVector(params Single[] data) => this.data = data;
     public MyVector(Func<Int32, Single> init, Int32 size)
     {

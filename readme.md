@@ -9,7 +9,9 @@
 
 ### Benchmarking
 
-- 
+- [Documentation](https://benchmarkdotnet.org/articles/overview.html)
+- [Diagnosers](https://benchmarkdotnet.org/articles/configs/diagnosers.html)
+  - Noteworthy: [Profiling](https://wojciechnagorski.com/2020/04/cross-platform-profiling-.net-code-with-benchmarkdotnet/)
 
 ## Setup
 
