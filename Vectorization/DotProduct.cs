@@ -6,7 +6,7 @@ namespace Vectorization;
 public static class DotProduct
 {
     /* Optimizations to explore
-        - remove premature initialisation of sum with first multiplication (var sum = left[0]*right[0])
+        - remove premature optimisation of sum with first multiplication (var sum = left[0]*right[0])
         - improve numerical accuracy of unrolled scalar.
         - improve readability by always using the scalar variant for the "tail". (is performance impacted?)
     */
