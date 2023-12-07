@@ -63,46 +63,46 @@ public class DotProductTests
     [Fact]
     public void UnrolledScalarComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.UnrolledScalar(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.UnrolledScalar(l, r));
     }
 
     [Fact]
     public void GenericScalarComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.GenericScalar<Single>(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.GenericScalar<Single>(l, r));
     }
 
     [Fact]
     public void ScalarFusedMultiplyComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.FusedScalar(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.FusedScalar(l, r));
     }
 
     [Fact]
     public void VectorizedComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.Vectorized(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.Vectorized(l, r));
     }
 
     [Fact]
     public void Vectorized128ComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.Vectorized128(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.Vectorized128(l, r));
     }
 
     [Fact]
     public void Vectorized256ComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.Vectorized256(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.Vectorized256(l, r));
     }
 
     [Fact]
     public void RecursiveVectorized128ComputesSameAsScalarVersion()
     {
-        ComparisonToScalar((l, r) => DotProduct.RecursiveVectorized128(l, r));
+        ComparisonWithScalar((l, r) => DotProduct.RecursiveVectorized128(l, r));
     }
 
-    public static void ComparisonToScalar(Func<MyVector, MyVector, Single> dotProduct)
+    private static void ComparisonWithScalar(Func<MyVector, MyVector, Single> dotProduct)
     {
         var expected = DotProduct.Scalar(vectorA, vectorB);
 
