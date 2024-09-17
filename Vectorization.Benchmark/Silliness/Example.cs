@@ -24,11 +24,12 @@ BenchmarkDotNet v0.14.0, Windows 11 (10.0.22621.4037/22H2/2022Update/SunValley2)
 13th Gen Intel Core i7-13850HX, 1 CPU, 28 logical and 20 physical cores
 .NET SDK 8.0.302
   [Host]     : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
-  Job-PXLTVF : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
+  Job-TNJFZK : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
 
-MaxIterationCount=16  WarmupCount=4  
+EnvironmentVariables=Empty  IterationTime=250ms  MaxIterationCount=16  
+MinIterationCount=5  WarmupCount=4  Error=0.907 ns  
 
-| Method  | Mean     | Error    | StdDev   | Allocated |
-|-------- |---------:|---------:|---------:|----------:|
-| Execute | 48.93 ns | 0.395 ns | 0.370 ns |         - |
+| Method  | Mean     | StdDev   | Allocated |
+|-------- |---------:|---------:|----------:|
+| Execute | 13.65 ns | 0.891 ns |         - |
 Summary */
