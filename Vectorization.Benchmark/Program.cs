@@ -3,19 +3,28 @@ using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+using Atmoos.Sphere.BenchmarkDotNet;
+using System.Reflection;
 
 namespace Vectorization.Benchmark;
 
 public class Program
 {
-    public static void Main(String[] args)
+    public static async Task Main(String[] args)
     {
-        if (true)
+        var assembly = typeof(Program).Assembly;
+        var summary = Run(args, assembly, simple: true);
+        await assembly.Export(summary);
+    }
+
+    private static IEnumerable<Summary> Run(String[] args, Assembly assembly, Boolean simple = true)
+    {
+        if (simple)
         {
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
-            return;
+            return BenchmarkSwitcher.FromAssembly(assembly).Run(args);
         }
 
         // 1:1 from: https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md#benchmarking
@@ -42,7 +51,6 @@ public class Program
             config = config.AddJob(enough.WithId("Vector128"));
         }
 
-        BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly)
-            .Run(args, config);
+        return BenchmarkSwitcher.FromAssembly(assembly).Run(args, config);
     }
 }
