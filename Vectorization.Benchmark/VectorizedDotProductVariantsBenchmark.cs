@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 
 namespace Vectorization.Benchmark;
 
@@ -18,46 +18,53 @@ public class VectorizedDotProductVariantsBenchmark
     }
 
     [Benchmark(Baseline = true)]
-    public Double Scalar() => DotProduct.Scalar(this.left, this.right);
+    public Single Scalar() => DotProduct.Scalar(this.left, this.right);
 
     [Benchmark]
-    public Double Vectorized() => DotProduct.Vectorized(this.left, this.right);
+    public Single Vectorized() => DotProduct.Vectorized(this.left, this.right);
 
     [Benchmark]
-    public Double Vectorized128() => DotProduct.Vectorized(this.left, this.right);
+    public Single Vectorized128() => DotProduct.Vectorized(this.left, this.right);
 
     [Benchmark]
-    public Double Vectorized256() => DotProduct.Vectorized(this.left, this.right);
+    public Single Vectorized256() => DotProduct.Vectorized(this.left, this.right);
 
     [Benchmark]
-    public Double VectorizedRecursive() => DotProduct.RecursiveVectorized128(this.left, this.right);
+    public Single VectorizedRecursive() => DotProduct.RecursiveVectorized128(this.left, this.right);
 }
 
-/*
-// * Summary *
+/* Summary
 
-BenchmarkDotNet v0.13.8, Windows 10 (10.0.19045.3448/22H2/2022Update)
-12th Gen Intel Core i7-1260P, 1 CPU, 16 logical and 12 physical cores
-.NET SDK 7.0.401
-[Host]     : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
-DefaultJob : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22621.4037/22H2/2022Update/SunValley2)
+13th Gen Intel Core i7-13850HX, 1 CPU, 28 logical and 20 physical cores
+.NET SDK 8.0.302
+  [Host]     : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
+  DefaultJob : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
 
 
-| Method         | Size | Mean       | Error     | StdDev    | Ratio | RatioSD |
-|--------------- |----- |-----------:|----------:|----------:|------:|--------:|
-| Scalar         | 3    |   3.277 ns | 0.0248 ns | 0.0220 ns |  1.00 |    0.00 |
-| UnrolledScalar | 3    |   3.234 ns | 0.0345 ns | 0.0288 ns |  0.99 |    0.01 |
-| Vectorized     | 3    |   3.869 ns | 0.1034 ns | 0.1106 ns |  1.17 |    0.03 |
-|                |      |            |           |           |       |         |
-| Scalar         | 12   |   7.543 ns | 0.0626 ns | 0.0586 ns |  1.00 |    0.00 |
-| UnrolledScalar | 12   |   5.972 ns | 0.0464 ns | 0.0411 ns |  0.79 |    0.01 |
-| Vectorized     | 12   |   5.337 ns | 0.0190 ns | 0.0177 ns |  0.71 |    0.00 |
-|                |      |            |           |           |       |         |
-| Scalar         | 128  |  67.126 ns | 0.4829 ns | 0.4517 ns |  1.00 |    0.00 |
-| UnrolledScalar | 128  |  58.977 ns | 0.1889 ns | 0.1578 ns |  0.88 |    0.01 |
-| Vectorized     | 128  |  23.592 ns | 0.1146 ns | 0.1016 ns |  0.35 |    0.00 |
-|                |      |            |           |           |       |         |
-| Scalar         | 1521 | 712.213 ns | 3.2871 ns | 2.9139 ns |  1.00 |    0.00 |
-| UnrolledScalar | 1521 | 693.594 ns | 2.9926 ns | 2.6529 ns |  0.97 |    0.01 |
-| Vectorized     | 1521 | 267.090 ns | 5.2579 ns | 7.0192 ns |  0.38 |    0.01 |
-*/
+| Method              | Size | Mean         | Error      | StdDev     | Ratio | RatioSD |
+|-------------------- |----- |-------------:|-----------:|-----------:|------:|--------:|
+| Scalar              | 3    |     2.234 ns |  0.0536 ns |  0.0501 ns |  1.00 |    0.03 |
+| Vectorized          | 3    |     3.747 ns |  0.0918 ns |  0.0859 ns |  1.68 |    0.05 |
+| Vectorized128       | 3    |     3.805 ns |  0.0950 ns |  0.0933 ns |  1.70 |    0.06 |
+| Vectorized256       | 3    |     3.800 ns |  0.0890 ns |  0.0833 ns |  1.70 |    0.05 |
+| VectorizedRecursive | 3    |     2.951 ns |  0.0802 ns |  0.0788 ns |  1.32 |    0.04 |
+|                     |      |              |            |            |       |         |
+| Scalar              | 12   |     5.379 ns |  0.0656 ns |  0.0614 ns |  1.00 |    0.02 |
+| Vectorized          | 12   |     4.623 ns |  0.0956 ns |  0.0894 ns |  0.86 |    0.02 |
+| Vectorized128       | 12   |     4.619 ns |  0.1131 ns |  0.1111 ns |  0.86 |    0.02 |
+| Vectorized256       | 12   |     4.610 ns |  0.0926 ns |  0.0867 ns |  0.86 |    0.02 |
+| VectorizedRecursive | 12   |    29.983 ns |  0.4318 ns |  0.4040 ns |  5.57 |    0.10 |
+|                     |      |              |            |            |       |         |
+| Scalar              | 128  |    59.408 ns |  0.8086 ns |  0.7564 ns |  1.00 |    0.02 |
+| Vectorized          | 128  |    19.253 ns |  0.2920 ns |  0.2732 ns |  0.32 |    0.01 |
+| Vectorized128       | 128  |    19.236 ns |  0.3117 ns |  0.2915 ns |  0.32 |    0.01 |
+| Vectorized256       | 128  |    19.091 ns |  0.2430 ns |  0.2154 ns |  0.32 |    0.01 |
+| VectorizedRecursive | 128  |   248.558 ns |  4.3209 ns |  4.0418 ns |  4.18 |    0.08 |
+|                     |      |              |            |            |       |         |
+| Scalar              | 1521 |   620.050 ns | 11.4508 ns | 10.7111 ns |  1.00 |    0.02 |
+| Vectorized          | 1521 |   219.801 ns |  2.3570 ns |  2.2047 ns |  0.35 |    0.01 |
+| Vectorized128       | 1521 |   220.734 ns |  2.0259 ns |  1.8950 ns |  0.36 |    0.01 |
+| Vectorized256       | 1521 |   219.252 ns |  2.8049 ns |  2.6237 ns |  0.35 |    0.01 |
+| VectorizedRecursive | 1521 | 3,929.271 ns | 76.7761 ns | 71.8164 ns |  6.34 |    0.15 |
+Summary */

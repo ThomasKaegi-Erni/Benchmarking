@@ -4,51 +4,36 @@ namespace Vectorization.Benchmark;
 
 public class DotProductBenchmark
 {
-    private MyVector left, right;
+  private MyVector left, right;
 
-    [Params(3, 12, 128, 516)]
-    public Int32 Size { get; set; }
+  [Params(3, 12, 128, 516)]
+  public Int32 Size { get; set; }
 
-    [GlobalSetup]
-    public void Setup()
-    {
-        this.left = new MyVector(i => i, Size);
-        this.right = new MyVector(i => 1f / i, Size);
-    }
+  [GlobalSetup]
+  public void Setup()
+  {
+    this.left = new MyVector(i => i, Size);
+    this.right = new MyVector(i => 1f / i, Size);
+  }
 
-    // Returning Double as my antivirus doesn't like Single's.
-    [Benchmark]
-    public Double DotProduct() => this.left * this.right;
+  [Benchmark]
+  public Single DotProduct() => this.left * this.right;
 }
 
-/*
-// * Summary *
+/* Summary
 
-BenchmarkDotNet v0.13.8, Windows 10 (10.0.19045.3448/22H2/2022Update)
-12th Gen Intel Core i7-1260P, 1 CPU, 16 logical and 12 physical cores
-.NET SDK 7.0.401
-  [Host]    : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
-  Scalar    : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT
-  Vector128 : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX
-  Vector256 : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22621.4037/22H2/2022Update/SunValley2)
+13th Gen Intel Core i7-13850HX, 1 CPU, 28 logical and 20 physical cores
+.NET SDK 8.0.302
+  [Host]     : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
+  DefaultJob : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
 
-IterationTime=250.0000 ms  MaxIterationCount=20  WarmupCount=3  
 
-| Method     | Job       | Size | Mean         | StdDev     | Ratio | Code Size |
-|----------- |---------- |----- |-------------:|-----------:|------:|----------:|
-| DotProduct | Scalar    | 3    |     3.339 ns |  0.0263 ns |  1.00 |     131 B |
-| DotProduct | Vector128 | 3    |     3.567 ns |  0.0306 ns |  1.07 |     139 B |
-| DotProduct | Vector256 | 3    |     3.582 ns |  0.0303 ns |  1.07 |     139 B |
-|            |           |      |              |            |       |           |
-| DotProduct | Scalar    | 12   |    44.585 ns |  0.3368 ns |  1.00 |     131 B |
-| DotProduct | Vector128 | 12   |     6.423 ns |  0.0777 ns |  0.14 |     139 B |
-| DotProduct | Vector256 | 12   |     5.663 ns |  0.0389 ns |  0.13 |     139 B |
-|            |           |      |              |            |       |           |
-| DotProduct | Scalar    | 128  |   380.213 ns |  2.5079 ns |  1.00 |     131 B |
-| DotProduct | Vector128 | 128  |    45.516 ns |  0.5536 ns |  0.12 |     139 B |
-| DotProduct | Vector256 | 128  |    23.466 ns |  0.1500 ns |  0.06 |     139 B |
-|            |           |      |              |            |       |           |
-| DotProduct | Scalar    | 516  | 1,494.336 ns |  7.2264 ns |  1.00 |     131 B |
-| DotProduct | Vector128 | 516  |   186.140 ns | 11.8729 ns |  0.12 |     139 B |
-| DotProduct | Vector256 | 516  |    91.477 ns |  0.6176 ns |  0.06 |     139 B |
-*/
+| Method     | Size | Mean      | Error     | StdDev    |
+|----------- |----- |----------:|----------:|----------:|
+| DotProduct | 3    |  2.207 ns | 0.0511 ns | 0.0453 ns |
+| DotProduct | 12   |  4.613 ns | 0.1116 ns | 0.1371 ns |
+| DotProduct | 128  | 19.220 ns | 0.2959 ns | 0.2768 ns |
+| DotProduct | 516  | 80.797 ns | 1.1628 ns | 1.0877 ns |
+Summary */
+
