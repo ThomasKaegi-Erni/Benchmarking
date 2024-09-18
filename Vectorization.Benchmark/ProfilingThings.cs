@@ -19,11 +19,11 @@ public class ProfilingThings
 
     /* Clutters the profiling view
     [Benchmark]
-    public Double Execute() => DotProduct.RecursiveVectorized128(left, right);
+    public Single Execute() => DotProduct.RecursiveVectorized128(left, right);
     */
 
     [Benchmark]
-    public Double ExecuteSlow() => SlowDotProduct.RecursiveVectorized128(left, right);
+    public Single ExecuteSlow() => SlowDotProduct.RecursiveVectorized128(left, right);
 }
 
 /* Summary
