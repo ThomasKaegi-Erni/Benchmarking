@@ -1,23 +1,23 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace Vectorization.Benchmark;
 
 public class DotProductBenchmark
 {
-  private MyVector left, right;
+    private MyVector left, right;
 
-  [Params(3, 12, 128, 516)]
-  public Int32 Size { get; set; }
+    [Params(3, 12, 128, 516)]
+    public Int32 Size { get; set; }
 
-  [GlobalSetup]
-  public void Setup()
-  {
-    this.left = new MyVector(i => i, Size);
-    this.right = new MyVector(i => 1f / i, Size);
-  }
+    [GlobalSetup]
+    public void Setup()
+    {
+        this.left = new MyVector(i => i, Size);
+        this.right = new MyVector(i => 1f / i, Size);
+    }
 
-  [Benchmark]
-  public Single DotProduct() => this.left * this.right;
+    [Benchmark]
+    public Single DotProduct() => this.left * this.right;
 }
 
 /* Summary

@@ -1,36 +1,36 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace Vectorization.Benchmark;
 
 // Do not seal benchmark classes. Benchmark.Net subclasses them...
 public class ScalarDotProductVariantsBenchmark
 {
-  private MyVector left, right;
+    private MyVector left, right;
 
-  [Params(3, 12, 128)]
-  public Int32 Size { get; set; }
+    [Params(3, 12, 128)]
+    public Int32 Size { get; set; }
 
-  [GlobalSetup]
-  public void Setup()
-  {
-    this.left = new MyVector(i => i, Size);
-    this.right = new MyVector(i => 1f / i, Size);
-  }
+    [GlobalSetup]
+    public void Setup()
+    {
+        this.left = new MyVector(i => i, Size);
+        this.right = new MyVector(i => 1f / i, Size);
+    }
 
-  [Benchmark(Baseline = true)]
-  public Single Naive() => DotProduct.Scalar(this.left, this.right);
+    [Benchmark(Baseline = true)]
+    public Single Naive() => DotProduct.Scalar(this.left, this.right);
 
-  [Benchmark]
-  public Single Generic() => DotProduct.GenericScalar<Single>(this.left, this.right);
+    [Benchmark]
+    public Single Generic() => DotProduct.GenericScalar<Single>(this.left, this.right);
 
-  [Benchmark]
-  public Single Recursive() => DotProduct.RecursiveScalar(this.left, this.right);
+    [Benchmark]
+    public Single Recursive() => DotProduct.RecursiveScalar(this.left, this.right);
 
-  [Benchmark]
-  public Single Unrolled() => DotProduct.UnrolledScalar(this.left, this.right);
+    [Benchmark]
+    public Single Unrolled() => DotProduct.UnrolledScalar(this.left, this.right);
 
-  [Benchmark]
-  public Single FusedMultiplyAdd() => DotProduct.FusedScalar(this.left, this.right);
+    [Benchmark]
+    public Single FusedMultiplyAdd() => DotProduct.FusedScalar(this.left, this.right);
 }
 
 /* Summary

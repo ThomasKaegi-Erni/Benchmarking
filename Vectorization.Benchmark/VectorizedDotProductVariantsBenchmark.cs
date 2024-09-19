@@ -1,36 +1,36 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace Vectorization.Benchmark;
 
 // Do not seal benchmark classes. Benchmark.Net subclasses them...
 public class VectorizedDotProductVariantsBenchmark
 {
-  private MyVector left, right;
+    private MyVector left, right;
 
-  [Params(3, 12, 128, 1521)]
-  public Int32 Size { get; set; }
+    [Params(3, 12, 128, 1521)]
+    public Int32 Size { get; set; }
 
-  [GlobalSetup]
-  public void Setup()
-  {
-    this.left = new MyVector(i => i, Size);
-    this.right = new MyVector(i => 1f / i, Size);
-  }
+    [GlobalSetup]
+    public void Setup()
+    {
+        this.left = new MyVector(i => i, Size);
+        this.right = new MyVector(i => 1f / i, Size);
+    }
 
-  [Benchmark(Baseline = true)]
-  public Single Scalar() => DotProduct.Scalar(this.left, this.right);
+    [Benchmark(Baseline = true)]
+    public Single Scalar() => DotProduct.Scalar(this.left, this.right);
 
-  [Benchmark]
-  public Single Vectorized() => DotProduct.Vectorized(this.left, this.right);
+    [Benchmark]
+    public Single Vectorized() => DotProduct.Vectorized(this.left, this.right);
 
-  [Benchmark]
-  public Single Vectorized128() => DotProduct.Vectorized(this.left, this.right);
+    [Benchmark]
+    public Single Vectorized128() => DotProduct.Vectorized(this.left, this.right);
 
-  [Benchmark]
-  public Single Vectorized256() => DotProduct.Vectorized(this.left, this.right);
+    [Benchmark]
+    public Single Vectorized256() => DotProduct.Vectorized(this.left, this.right);
 
-  [Benchmark]
-  public Single VectorizedRecursive() => DotProduct.RecursiveVectorized128(this.left, this.right);
+    [Benchmark]
+    public Single VectorizedRecursive() => DotProduct.RecursiveVectorized128(this.left, this.right);
 }
 
 /* Summary

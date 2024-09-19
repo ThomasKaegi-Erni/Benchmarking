@@ -1,4 +1,4 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
 namespace Vectorization.Benchmark;
@@ -9,12 +9,12 @@ namespace Vectorization.Benchmark;
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 public class CreateBenchmark
 {
-  [Benchmark]
-  [Arguments(3)]
-  [Arguments(6)]
-  [Arguments(12)]
-  [Arguments(24)]
-  public Int32 MyVector(Int32 size) => new MyVector(i => i, size).Size;
+    [Benchmark]
+    [Arguments(3)]
+    [Arguments(6)]
+    [Arguments(12)]
+    [Arguments(24)]
+    public Int32 MyVector(Int32 size) => new MyVector(i => i, size).Size;
 }
 
 /* Summary

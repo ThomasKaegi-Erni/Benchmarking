@@ -1,4 +1,4 @@
-
+﻿
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 
@@ -10,12 +10,12 @@ namespace Vectorization.Benchmark.Silliness;
 [MemoryDiagnoser]
 public class Example
 {
-  private const Int32 size = 53;
-  private static readonly Vector left = Vector.Create(i => i / 5f, size);
-  private static readonly Vector right = Vector.Create(i => (i - 7f) / 11f, size);
+    private const Int32 size = 53;
+    private static readonly Vector left = Vector.Create(i => i / 5f, size);
+    private static readonly Vector right = Vector.Create(i => (i - 7f) / 11f, size);
 
-  [Benchmark]
-  public Single Execute() => left.DotProduct(right);
+    [Benchmark]
+    public Single Execute() => left.DotProduct(right);
 }
 
 /* Summary

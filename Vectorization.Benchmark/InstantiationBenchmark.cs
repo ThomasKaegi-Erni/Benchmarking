@@ -1,4 +1,4 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 
 namespace Vectorization.Benchmark;
@@ -10,18 +10,18 @@ namespace Vectorization.Benchmark;
 [EventPipeProfiler(EventPipeProfile.CpuSampling)]
 public class InstantiationBenchmark
 {
-  private const Int32 size = 133;
+    private const Int32 size = 133;
 
-  [Benchmark(Baseline = true)]
-  public Int32 Array() => new Single[size].Length;
+    [Benchmark(Baseline = true)]
+    public Int32 Array() => new Single[size].Length;
 
-  [Benchmark]
-  public Int32 MyVectorWithStaticLambda() => new MyVector(i => i, size).Size;
+    [Benchmark]
+    public Int32 MyVectorWithStaticLambda() => new MyVector(i => i, size).Size;
 
-  [Benchmark]
-  public Int32 MyVectorWithStaticMethod() => new MyVector(SomeStaticMethod, size).Size;
+    [Benchmark]
+    public Int32 MyVectorWithStaticMethod() => new MyVector(SomeStaticMethod, size).Size;
 
-  private static Single SomeStaticMethod(Int32 value) => value;
+    private static Single SomeStaticMethod(Int32 value) => value;
 }
 
 /* Summary

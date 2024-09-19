@@ -1,4 +1,4 @@
-using System.Runtime.Intrinsics;
+﻿using System.Runtime.Intrinsics;
 
 namespace Vectorization.Benchmark.Silliness;
 
@@ -8,15 +8,13 @@ public static class SlowDotProduct
 
     public static Single RecursiveVectorized128(in ReadOnlySpan<Single> left, in ReadOnlySpan<Single> right)
     {
-        if (File.Exists(filename))
-        {
+        if (File.Exists(filename)) {
             File.Delete(filename);
         }
         return Vector128.Sum(Dump(Recursive(in left, in right)));
     }
 
-    private static Vector128<Single> Recursive(in ReadOnlySpan<Single> l, in ReadOnlySpan<Single> r) => l.Length switch
-    {
+    private static Vector128<Single> Recursive(in ReadOnlySpan<Single> l, in ReadOnlySpan<Single> r) => l.Length switch {
         0 => Vector128<Single>.Zero,
         1 => Vector128.Create(l[0] * r[0], 0f, 0f, 0f),
         2 => Vector128.Create(l[0] * r[0], l[1] * r[1], 0f, 0f),

@@ -1,4 +1,6 @@
+﻿using System.Reflection;
 using System.Runtime.Intrinsics;
+using Atmoos.Sphere.BenchmarkDotNet;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
@@ -6,8 +8,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
-using Atmoos.Sphere.BenchmarkDotNet;
-using System.Reflection;
 
 namespace Vectorization.Benchmark;
 
@@ -29,8 +29,7 @@ public class Program
                     .WithMaxIterationCount(13);
         IConfig config = DefaultConfig.Instance.HideColumns(Column.EnvironmentVariables, Column.RatioSD, Column.Error);
 
-        if (simple)
-        {
+        if (simple) {
             return BenchmarkSwitcher.FromAssembly(assembly).Run(args, config.AddJob(enough));
         }
 
@@ -39,15 +38,13 @@ public class Program
                 (exportGithubMarkdown: true, printInstructionAddresses: false)))
             .AddJob(enough.WithEnvironmentVariable("DOTNET_EnableHWIntrinsic", "0").WithId("Scalar").AsBaseline());
 
-        if (Vector256.IsHardwareAccelerated)
-        {
+        if (Vector256.IsHardwareAccelerated) {
             config = config
                 .AddJob(enough.WithId("Vector256"))
                 .AddJob(enough.WithEnvironmentVariable("DOTNET_EnableAVX2", "0").WithId("Vector128"));
 
         }
-        else if (Vector128.IsHardwareAccelerated)
-        {
+        else if (Vector128.IsHardwareAccelerated) {
             config = config.AddJob(enough.WithId("Vector128"));
         }
 

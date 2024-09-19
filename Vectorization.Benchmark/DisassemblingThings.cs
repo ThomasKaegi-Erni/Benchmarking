@@ -1,4 +1,4 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 
 namespace Vectorization.Benchmark;
@@ -9,12 +9,12 @@ namespace Vectorization.Benchmark;
 [DisassemblyDiagnoser]
 public class DisassemblingThings
 {
-  private const Int32 size = 514;
-  private static readonly MyVector left = new(i => i / 5f, size);
-  private static readonly MyVector right = new(i => (i - 7f) / 11f, size);
+    private const Int32 size = 514;
+    private static readonly MyVector left = new(i => i / 5f, size);
+    private static readonly MyVector right = new(i => (i - 7f) / 11f, size);
 
-  [Benchmark]
-  public Single Execute() => DotProduct.Scalar(left, right);
+    [Benchmark]
+    public Single Execute() => DotProduct.Scalar(left, right);
 }
 
 /* Summary

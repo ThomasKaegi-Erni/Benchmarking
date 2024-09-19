@@ -1,4 +1,4 @@
-using System.Runtime.Intrinsics;
+﻿using System.Runtime.Intrinsics;
 
 namespace Vectorization.Benchmark.Silliness;
 
