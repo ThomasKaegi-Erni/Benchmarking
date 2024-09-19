@@ -1,4 +1,4 @@
-namespace Vectorization.Test;
+﻿namespace Vectorization.Test;
 
 public class DotProductTests
 {

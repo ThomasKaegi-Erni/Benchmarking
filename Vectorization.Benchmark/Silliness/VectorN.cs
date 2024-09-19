@@ -1,4 +1,4 @@
-using System.Runtime.Intrinsics;
+﻿using System.Runtime.Intrinsics;
 
 namespace Vectorization.Benchmark.Silliness;
 
@@ -9,8 +9,7 @@ public readonly struct VectorN : IVector
     public VectorN(Func<Int32, Single> init, Int32 size, Int32 offset = 0)
     {
         var data = new Single[8];
-        for (Int32 i = 0; i < Math.Min(size, data.Length); ++i)
-        {
+        for (Int32 i = 0; i < Math.Min(size, data.Length); ++i) {
             data[i] = init(i + offset);
         }
         this.data = data;

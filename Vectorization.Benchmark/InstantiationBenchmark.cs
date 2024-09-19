@@ -1,4 +1,4 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 
 namespace Vectorization.Benchmark;
@@ -10,33 +10,34 @@ namespace Vectorization.Benchmark;
 [EventPipeProfiler(EventPipeProfile.CpuSampling)]
 public class InstantiationBenchmark
 {
-  private const Int32 size = 133;
+    private const Int32 size = 133;
 
-  [Benchmark(Baseline = true)]
-  public Int32 Array() => new Single[size].Length;
+    [Benchmark(Baseline = true)]
+    public Int32 Array() => new Single[size].Length;
 
-  [Benchmark]
-  public Int32 MyVectorWithStaticLambda() => new MyVector(i => i, size).Size;
+    [Benchmark]
+    public Int32 MyVectorWithStaticLambda() => new MyVector(i => i, size).Size;
 
-  [Benchmark]
-  public Int32 MyVectorWithStaticMethod() => new MyVector(SomeStaticMethod, size).Size;
+    [Benchmark]
+    public Int32 MyVectorWithStaticMethod() => new MyVector(SomeStaticMethod, size).Size;
 
-  private static Single SomeStaticMethod(Int32 value) => value;
+    private static Single SomeStaticMethod(Int32 value) => value;
 }
 
-/*
-// * Summary *
+/* Summary
 
-BenchmarkDotNet v0.13.8, Windows 10 (10.0.19045.3448/22H2/2022Update)
-12th Gen Intel Core i7-1260P, 1 CPU, 16 logical and 12 physical cores
-.NET SDK 7.0.401
-  [Host]     : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
-  Job-EBLLUQ : .NET 7.0.11 (7.0.1123.42427), X64 RyuJIT AVX2
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22621.4037/22H2/2022Update/SunValley2)
+13th Gen Intel Core i7-13850HX, 1 CPU, 28 logical and 20 physical cores
+.NET SDK 8.0.302
+  [Host]     : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
+  Job-FSMAAT : .NET 8.0.6 (8.0.624.26715), X64 RyuJIT AVX2
 
-MaxIterationCount=20  WarmupCount=4  
+EnvironmentVariables=Empty  IterationTime=250ms  MaxIterationCount=20  
+MinIterationCount=5  WarmupCount=4  RatioSD=?  
 
-| Method                   | Mean      | Error    | StdDev   | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
-|------------------------- |----------:|---------:|---------:|------:|--------:|-------:|----------:|------------:|
-| Array                    |  16.74 ns | 0.352 ns | 0.377 ns |  1.00 |    0.00 | 0.0595 |     560 B |        1.00 |
-| MyVectorWithStaticLambda | 218.79 ns | 1.404 ns | 1.313 ns | 13.10 |    0.29 | 0.0594 |     560 B |        1.00 |
-| MyVectorWithStaticMethod | 274.04 ns | 1.863 ns | 1.454 ns | 16.51 |    0.35 | 0.0591 |     560 B |        1.00 |*/
+| Method                   | Mean        | StdDev    | Median      | Ratio | Gen0   | Allocated | Alloc Ratio |
+|------------------------- |------------:|----------:|------------:|------:|-------:|----------:|------------:|
+| Array                    |   0.0001 ns | 0.0003 ns |   0.0000 ns |     ? |      - |         - |           ? |
+| MyVectorWithStaticLambda |  66.8823 ns | 0.4683 ns |  66.9622 ns |     ? | 0.0355 |     560 B |           ? |
+| MyVectorWithStaticMethod | 254.4576 ns | 2.2450 ns | 254.9144 ns |     ? | 0.0351 |     560 B |           ? |
+Summary */
